@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pathly: Your AI Learning Navigator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --font-main: 'Inter', sans-serif;
+            --font-heading: 'Poppins', sans-serif;
+
+            /* Light Mode */
+            --bg-light: #F0F7FF;
+            --card-bg-light: rgba(255, 255, 255, 0.7); 
+            --text-light: #122C4A;
+            --accent-light: #007BFF;
+            --accent-light-rgb: 0, 123, 255;
+            --accent-light-hover: #268EFF; 
+            --border-light: rgba(0, 123, 255, 0.2); 
+            --shadow-light: 0 20px 40px -15px rgba(0, 100, 200, 0.1), 0 8px 12px -6px rgba(0, 0, 0, 0.04);
+            --secondary-light: #E3F2FD;
+            --success-light: #28a745;
+            --warning-light: #ffc107;
+            --info-light: #17a2b8;
+            --aurora-1-light: #60A5FA; 
+            --aurora-2-light: #3B82F6; 
+            --aurora-3-light: #22D3EE; 
+            --aurora-4-light: #A5B4FC; 
+            --aurora-5-light: #0EA5E9; 
+            --btn-shadow-light: 0 5px 15px -3px rgba(var(--accent-light-rgb),0.35), 0 3px 8px -4px rgba(var(--accent-light-rgb),0.25);
+            --btn-shadow-hover-light: 0 8px 20px -4px rgba(var(--accent-light-rgb),0.4), 0 5px 12px -5px rgba(var(--accent-light-rgb),0.3);
+
+
+            /* Dark Mode */
+            --bg-dark: #010F1F; 
+            --card-bg-dark: rgba(10, 25, 45, 0.65); 
+            --text-dark: #E0E0E0;
+            --accent-dark: #4FC3F7;
+            --accent-dark-rgb: 79, 195, 247;
+            --accent-dark-hover: #72D2F9; 
+            --border-dark: rgba(79, 195, 247, 0.25);
+            --shadow-dark: 0 20px 40px -15px rgba(0, 30, 60, 0.2), 0 8px 12px -6px rgba(0, 0, 0, 0.15); 
+            --secondary-dark: #0A1E33; 
+            --success-dark: #32CD32;
+            --warning-dark: #fd7e14;
+            --info-dark: #20c997;
+            --aurora-1-dark: #2563EB; 
+            --aurora-2-dark: #0E7490; 
+            --aurora-3-dark: #5B21B6; 
+            --aurora-4-dark: #3B82F6; 
+            --aurora-5-dark: #7C3AED; 
+            --btn-shadow-dark: 0 5px 15px -3px rgba(var(--accent-dark-rgb),0.25), 0 3px 8px -4px rgba(var(--accent-dark-rgb),0.15);
+            --btn-shadow-hover-dark: 0 8px 20px -4px rgba(var(--accent-dark-rgb),0.3), 0 5px 12px -5px rgba(var(--accent-dark-rgb),0.2);
+
+            /* Default to Light */
+            --bg: var(--bg-light);
+            --card-bg: var(--card-bg-light);
+            --text-color: var(--text-light);
+            --accent: var(--accent-light);
+            --accent-rgb: var(--accent-light-rgb);
+            --accent-hover: var(--accent-light-hover);
+            --border-color: var(--border-light);
+            --shadow: var(--shadow-light);
+            --secondary: var(--secondary-light);
+            --success: var(--success-light);
+            --warning: var(--warning-light);
+            --info: var(--info-light);
+            --aurora-1: var(--aurora-1-light);
+            --aurora-2: var(--aurora-2-light);
+            --aurora-3: var(--aurora-3-light);
+            --aurora-4: var(--aurora-4-light);
+            --aurora-5: var(--aurora-5-light);
+            --btn-shadow: var(--btn-shadow-light);
+            --btn-shadow-hover: var(--btn-shadow-hover-light);
+
+            --transition-speed: 0.4s; 
+            --border-radius-large: 28px;
+            --border-radius-medium: 18px;
+            --chat-widget-width: 380px; /* Width of the chat widget */
+            --chat-widget-trigger-base-right: 20px; /* Base offset for trigger */
+        }
+
+        html.dark {
+            --bg: var(--bg-dark);
+            --card-bg: var(--card-bg-dark);
+            --text-color: var(--text-dark);
+            --accent: var(--accent-dark);
+            --accent-rgb: var(--accent-dark-rgb);
+            --accent-hover: var(--accent-dark-hover);
+            --border-color: var(--border-dark);
+            --shadow: var(--shadow-dark);
+            --secondary: var(--secondary-dark);
+            --success: var(--success-dark);
+            --warning: var(--warning-dark);
+            --info: var(--info-dark);
+            --aurora-1: var(--aurora-1-dark);
+            --aurora-2: var(--aurora-2-dark);
+            --aurora-3: var(--aurora-3-dark);
+            --aurora-4: var(--aurora-4-dark);
+            --aurora-5: var(--aurora-5-dark);
+            --btn-shadow: var(--btn-shadow-dark);
+            --btn-shadow-hover: var(--btn-shadow-hover-dark);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html, body, #root { height: 100%; } 
+
+        body {
+            font-family: var(--font-main);
+            background-color: transparent; 
+            color: var(--text-color);
+            transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
+            overflow: hidden; 
+        }
+        
+        #root {
+            width: 100%; 
+        }
+        #main-content-area {
+             transition: transform 0.35s cubic-bezier(0.25, 0.1, 0.25, 1), margin-right 0.35s cubic-bezier(0.25, 0.1, 0.25, 1);
+        }
+
+        .main-content-shifted {
+            margin-right: var(--chat-widget-width); 
+             @media (max-width: 768px) { 
+                margin-right: min(var(--chat-widget-width), 90vw); 
+            }
+        }
+
+
+        #aurora-container {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1; 
+            background-color: var(--bg); 
+            transition: background-color var(--transition-speed) ease;
+            overflow: hidden; 
+        }
+        .aurora-blur-container { 
+            position: absolute;
+            top: -50%; 
+            left: -50%;
+            width: 200%; 
+            height: 200%;
+            filter: blur(150px) brightness(1.05) saturate(1.2); 
+            transform: translateZ(0); 
+        }
+        .aurora-blob { 
+            position: absolute; border-radius: 50%; 
+            will-change: transform, background-color, opacity; 
+            transition: background-color var(--transition-speed) ease; 
+            mix-blend-mode: screen; 
+        }
+        html.dark .aurora-blob { 
+          mix-blend-mode: color-dodge; 
+        }
+
+        .aurora-blob:nth-child(1) { width: 70vmin; height: 70vmin; top: 10%; left: 5%; background: var(--aurora-1); animation: move1 28s infinite alternate ease-in-out; opacity: 0.6; }
+        .aurora-blob:nth-child(2) { width: 65vmin; height: 65vmin; top: 30%; right: 10%; background: var(--aurora-2); animation: move2 32s infinite alternate ease-in-out; opacity: 0.55; }
+        .aurora-blob:nth-child(3) { width: 60vmin; height: 60vmin; bottom: 15%; left: 20%; background: var(--aurora-3); animation: move3 30s infinite alternate ease-in-out; opacity: 0.6; }
+        .aurora-blob:nth-child(4) { width: 55vmin; height: 55vmin; bottom: 5%; right: 25%; background: var(--aurora-4); opacity: 0.5; animation: move4 25s infinite alternate ease-in-out; }
+        .aurora-blob:nth-child(5) { width: 50vmin; height: 50vmin; top: 5%; left: 40%; background: var(--aurora-5); opacity: 0.45; animation: move5 35s infinite alternate ease-in-out; }
+
+
+        #aurora-container::after { content: ''; position: absolute; width: 100%; height: 100%; top: 0; left: 0; background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23n)"/></svg>'); opacity: 0.015; pointer-events: none; } 
+        
+        @keyframes move1 { from { transform: translate(0, 0) rotate(0deg) scale(1); } to { transform: translate(40vw, 50vh) rotate(270deg) scale(1.3); } }
+        @keyframes move2 { from { transform: translate(0, 0) rotate(0deg) scale(1); } to { transform: translate(-50vw, -30vh) rotate(300deg) scale(1.2); } }
+        @keyframes move3 { from { transform: translate(0, 0) rotate(0deg) scale(1); } to { transform: translate(35vw, -45vh) rotate(180deg) scale(1.4); } }
+        @keyframes move4 { from { transform: translate(0, 0) rotate(0deg) scale(1); } to { transform: translate(-30vw, 40vh) rotate(360deg) scale(1.1); } }
+        @keyframes move5 { from { transform: translate(0, 0) rotate(0deg) scale(1); } to { transform: translate(20vw, -25vh) rotate(220deg) scale(1.3); } }
+
+
+        /* Component specific animations */
+        @keyframes slideUpFadeIn { 
+            to { 
+                transform: translateY(0); 
+                opacity: 1; 
+            } 
+        }
+        @keyframes fadeInMessage { 
+            from { opacity: 0; transform: translateY(10px); }
+            to { 
+                opacity: 1; 
+                transform: translateY(0); 
+            } 
+        }
+        @keyframes contentFadeIn { 
+            from { 
+                opacity: 0; 
+                transform: translateY(10px); 
+            } 
+            to { 
+                opacity: 1; 
+                transform: translateY(0); 
+            } 
+        }
+        
+        /* Progress bar shine animation */
+        .progress-bar-shine { 
+            position: relative; 
+            overflow: hidden; 
+        }
+        .progress-bar-shine::after {
+          content: ''; 
+          position: absolute; 
+          top: 0; 
+          left: 0;
+          width: 40%; 
+          height: 100%;
+          background: linear-gradient(to right, transparent 0%, rgba(255,255,255,0.35) 50%, transparent 100%);
+          animation: progressBarShineAnimation 2.5s infinite linear;
+        }
+        @keyframes progressBarShineAnimation {
+          0% { transform: translateX(-100%); }
+          100% { transform: translateX(250%); }
+        }
+
+        /* Typing indicator animation */
+        @keyframes typingBounce {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-4px); }
+        }
+        .typing-dot {
+          animation: typingBounce 1.2s infinite ease-in-out;
+        }
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+
+        ::-webkit-scrollbar { width: 10px; height: 10px; } 
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 5px; border: 2px solid transparent; background-clip: content-box; } 
+        ::-webkit-scrollbar-thumb:hover { background: var(--accent-hover); }
+
+        input, textarea, select, button {
+          font-family: inherit;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: var(--font-heading);
+            letter-spacing: -0.02em; 
+        }
+        
+        .pathly-font-heading {
+            font-family: var(--font-heading);
+        }
+        .pathly-font-main {
+            font-family: var(--font-main);
+        }
+
+        /* Global Chat Widget Styles */
+        .global-chat-widget-trigger {
+            position: fixed;
+            bottom: 20px;
+            right: var(--chat-widget-trigger-base-right); /* Use CSS variable */
+            z-index: 1000;
+            width: 48px;  /* Smaller size */
+            height: 48px; /* Smaller size */
+            background-color: var(--accent);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 6px 16px -4px rgba(var(--accent-rgb), 0.5);
+            cursor: pointer;
+            transition: transform 0.2s ease-out, box-shadow 0.2s ease-out, background-color 0.2s ease-out, right 0.35s cubic-bezier(0.25, 0.1, 0.25, 1); /* Added 'right' transition */
+        }
+        .global-chat-widget-trigger:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 20px -4px rgba(var(--accent-rgb), 0.6);
+        }
+        .global-chat-widget-trigger.shifted {
+            right: calc(var(--chat-widget-trigger-base-right) + var(--chat-widget-width));
+        }
+        @media (max-width: 768px) {
+            .global-chat-widget-trigger.shifted {
+                 right: calc(var(--chat-widget-trigger-base-right) + min(var(--chat-widget-width), 90vw));
+            }
+        }
+
+
+        .global-chat-widget-panel {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: var(--chat-widget-width);
+            height: 100%;
+            max-width: 90vw; /* Max width on small screens */
+            background-color: var(--card-bg); 
+            border-left: 1px solid var(--border-color);
+            box-shadow: -12px 0 35px -12px rgba(0,0,0,0.2); 
+            z-index: 999;
+            display: flex;
+            flex-direction: column;
+            transform: translateX(100%);
+            transition: transform 0.35s cubic-bezier(0.25, 0.1, 0.25, 1);
+            overflow: hidden; 
+            backdrop-filter: blur(12px); 
+        }
+        .global-chat-widget-panel.open {
+            transform: translateX(0%);
+        }
+        .global-chat-history-panel {
+            padding: 10px;
+            border-bottom: 1px solid var(--border-color);
+            max-height: 200px; /* Or whatever height you prefer */
+            overflow-y: auto;
+        }
+        .global-chat-history-item {
+            padding: 8px 12px;
+            margin-bottom: 5px;
+            border-radius: var(--border-radius-medium);
+            cursor: pointer;
+            transition: background-color 0.2s;
+            font-size: 0.85rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .global-chat-history-item:hover {
+            background-color: var(--secondary);
+        }
+        .global-chat-history-item.active {
+            background-color: var(--accent);
+            color: white;
+            font-weight: 500;
+        }
+        .global-chat-history-item-name {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-right: 8px;
+        }
+        .global-chat-history-item-date {
+            font-size: 0.7rem;
+            opacity: 0.7;
+            white-space: nowrap;
+        }
+
+
+        /* Override Tailwind prose for chat messages inside global widget for better fit */
+        .global-chat-widget-panel .prose {
+          font-size: 0.9rem; 
+        }
+        .global-chat-widget-panel .prose-sm {
+          font-size: 0.85rem; 
+        }
+        .global-chat-widget-panel .prose :where(p) {
+          margin-top: 0.5em;
+          margin-bottom: 0.5em;
+        }
+        .global-chat-widget-panel .prose :where(ul), .global-chat-widget-panel .prose :where(ol) {
+          margin-top: 0.5em;
+          margin-bottom: 0.5em;
+        }
+
+        /* Hamburger Menu Styles */
+        .hamburger-menu-button .bar {
+            width: 22px; /* Width of each bar */
+            height: 2.5px; /* Thickness of each bar */
+            background-color: var(--text-color);
+            border-radius: 2px;
+            transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+            margin: 2px 0; /* Spacing between bars */
+        }
+        .hamburger-menu-button .bar-open-1 {
+            transform: rotate(45deg) translate(4px, 4.5px);
+        }
+        .hamburger-menu-button .bar-open-2 {
+            opacity: 0;
+            transform: translateX(-10px);
+        }
+        .hamburger-menu-button .bar-open-3 {
+            transform: rotate(-45deg) translate(4px, -4.5px);
+        }
+
+        .dropdown-menu {
+            opacity: 0;
+            transform: translateY(-10px) scale(0.95);
+            animation: dropdownOpenAnimation 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+            transform-origin: top right;
+        }
+        @keyframes dropdownOpenAnimation {
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        /* Style for items within dropdown, if not using Button component */
+        .dropdown-menu-item {
+            display: block;
+            width: 100%;
+            text-align: left;
+            padding: 0.6rem 0.9rem;
+            font-size: 0.9rem;
+            color: var(--text-color);
+            border-radius: var(--border-radius-medium);
+            transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+        }
+        .dropdown-menu-item:hover {
+            background-color: var(--secondary);
+            color: var(--accent);
+        }
+
+    </style>
+    <script>
+      tailwind.config = {
+        darkMode: 'class', 
+        theme: {
+          extend: {
+            colors: {
+              'pathly-bg': 'var(--bg)',
+              'pathly-card-bg': 'var(--card-bg)',
+              'pathly-text': 'var(--text-color)',
+              'pathly-accent': 'var(--accent)',
+              'pathly-accent-hover': 'var(--accent-hover)',
+              'pathly-border': 'var(--border-color)',
+              'pathly-shadow-color': 'var(--shadow)', 
+              'pathly-secondary': 'var(--secondary)',
+              'pathly-success': 'var(--success)',
+              'pathly-warning': 'var(--warning)',
+              'pathly-info': 'var(--info)',
+            },
+            borderRadius: {
+              'pathly-lg': 'var(--border-radius-large)',
+              'pathly-md': 'var(--border-radius-medium)',
+            },
+            fontFamily: {
+                sans: ['Inter', 'sans-serif'],
+                heading: ['Poppins', 'sans-serif'],
+            },
+            boxShadow: {
+              'pathly-card': 'var(--shadow)', 
+              'pathly-btn-primary': 'var(--btn-shadow)',
+              'pathly-btn-primary-hover': 'var(--btn-shadow-hover)',
+            },
+            typography: (theme) => ({
+              DEFAULT: {
+                css: {
+                  '--tw-prose-body': 'var(--text-color)',
+                  '--tw-prose-headings': 'var(--text-color)', 
+                  '--tw-prose-lead': 'var(--text-color)',
+                  '--tw-prose-links': 'var(--accent)',
+                  '--tw-prose-bold': 'var(--text-color)',
+                  '--tw-prose-counters': 'var(--text-color)', 
+                  '--tw-prose-bullets': 'var(--accent)',
+                  '--tw-prose-hr': 'var(--border-color)',
+                  '--tw-prose-quotes': 'var(--text-color)',
+                  '--tw-prose-quote-borders': 'var(--accent)',
+                  '--tw-prose-captions': 'var(--text-color)',
+                  '--tw-prose-code': 'var(--text-color)', 
+                  '--tw-prose-pre-code': 'var(--text-color)', 
+                  '--tw-prose-pre-bg': 'rgba(var(--secondary-rgb, 0 0 0) / 0.5)', 
+                  '--tw-prose-th-borders': 'var(--border-color)',
+                  '--tw-prose-td-borders': 'var(--border-color)',
+
+                  '--tw-prose-invert-body': 'var(--text-dark)',
+                  '--tw-prose-invert-headings': 'var(--text-dark)',
+                  '--tw-prose-invert-lead': 'var(--text-dark)',
+                  '--tw-prose-invert-links': 'var(--accent-dark)',
+                  '--tw-prose-invert-bold': 'var(--text-dark)',
+                  '--tw-prose-invert-counters': 'var(--text-dark)',
+                  '--tw-prose-invert-bullets': 'var(--accent-dark)',
+                  '--tw-prose-invert-hr': 'var(--border-dark)',
+                  '--tw-prose-invert-quotes': 'var(--text-dark)',
+                  '--tw-prose-invert-quote-borders': 'var(--accent-dark)',
+                  '--tw-prose-invert-captions': 'var(--text-dark)',
+                  '--tw-prose-invert-code': 'var(--text-dark)', 
+                  '--tw-prose-invert-pre-code': 'var(--text-dark)', 
+                  '--tw-prose-invert-pre-bg': 'rgba(var(--secondary-dark-rgb, 255 255 255) / 0.05)', 
+                  '--tw-prose-invert-th-borders': 'var(--border-dark)',
+                  '--tw-prose-invert-td-borders': 'var(--border-dark)',
+                  
+                  h1: { fontFamily: 'var(--font-heading)', letterSpacing: '-0.025em', fontWeight: '800' },
+                  h2: { fontFamily: 'var(--font-heading)', letterSpacing: '-0.02em', fontWeight: '700' },
+                  h3: { fontFamily: 'var(--font-heading)', letterSpacing: '-0.015em', fontWeight: '600' },
+                  h4: { fontFamily: 'var(--font-heading)', letterSpacing: '-0.01em', fontWeight: '600' },
+                  p: { fontFamily: 'var(--font-main)', lineHeight: '1.7' }, 
+                  li: { fontFamily: 'var(--font-main)', lineHeight: '1.7', marginBlockStart: '0.5em', marginBlockEnd: '0.5em' },
+                  a: { 
+                    fontFamily: 'var(--font-main)', 
+                    fontWeight: '600', 
+                    textDecoration: 'none',
+                    transition: 'color 0.2s ease-in-out, opacity 0.2s ease-in-out',
+                  },
+                  'a:hover': {
+                    textDecoration: 'underline',
+                    textDecorationColor: 'var(--accent)',
+                    textUnderlineOffset: '4px',
+                  },
+                  code: { fontFamily: 'var(--font-main)', fontWeight: '500', padding: '0.2em 0.4em', margin: '0', fontSize: '88%', borderRadius: '8px' },
+                  'code::before': { content: '"" !important' }, 
+                  'code::after': { content: '"" !important' },
+                  pre: { fontFamily: 'var(--font-main)', border: '1px solid var(--border-color)', borderRadius: 'var(--border-radius-medium)', padding: '1.25em', overflowX: 'auto', lineHeight: '1.6' },
+                  'pre code': { backgroundColor: 'transparent', padding: '0', margin: '0', fontSize: '100%', borderRadius: '0', fontFamily: 'inherit', fontWeight: '400' }, 
+                },
+              },
+            }),
+          }
+        },
+        plugins: [
+            tailwind.plugin(function ({ addBase, theme }) {
+              addBase({
+                'h1': { fontFamily: theme('fontFamily.heading'), fontWeight: theme('fontWeight.extrabold'), letterSpacing: theme('letterSpacing.tight') },
+                'h2': { fontFamily: theme('fontFamily.heading'), fontWeight: theme('fontWeight.bold'), letterSpacing: theme('letterSpacing.tight') },
+                'h3': { fontFamily: theme('fontFamily.heading'), fontWeight: theme('fontWeight.semibold'), letterSpacing: theme('letterSpacing.tight') },
+              })
+            }),
+        ]
+      }
+    </script>
+<script type="importmap">
+{
+  "imports": {
+    "react/": "https://esm.sh/react@^19.1.0/",
+    "react": "https://esm.sh/react@^19.1.0",
+    "@google/genai": "https://esm.sh/@google/genai@^1.5.1",
+    "react-dom/": "https://esm.sh/react-dom@^19.1.0/",
+    "react-markdown": "https://esm.sh/react-markdown@9.0.1",
+    "remark-gfm": "https://esm.sh/remark-gfm@4.0.0"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+<body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="aurora-container">
+        <div class="aurora-blur-container">
+            <div class="aurora-blob"></div><div class="aurora-blob"></div><div class="aurora-blob"></div><div class="aurora-blob"></div><div class="aurora-blob"></div>
+        </div>
+    </div>
+    <div id="root"></div>
+    <script type="module" src="./index.tsx"></script>
+<script type="module" src="/index.tsx"></script>
+</body>
+</html>

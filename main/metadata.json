@@ -1,0 +1,6 @@
+{
+  "name": "Pathly powered by ai",
+  "description": "An AI-powered learning navigator that transforms internet chaos into clear, motivating, and personalized learning paths. Users interact with an AI to define their learning goals, and the application generates a custom course blueprint, offers an optional adaptive test, and then builds a structured course.",
+  "requestFramePermissions": [],
+  "prompt": ""
+}
